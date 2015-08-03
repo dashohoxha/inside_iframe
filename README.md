@@ -13,3 +13,20 @@ function MODULE_inside_iframe() {
   drupal_add_css($path . '/inside_iframe.css');
 }
 ```
+
+For an example of this module in action, see and compare these:
+ - https://l10n.org.al/btr/project/LibreOffice/cui/sq/
+ - https://l10n.org.al/btr/project/LibreOffice/cui/sq/?display=iframe
+
+It can be embedded inside another page like this:
+```
+<div style="width:400px; display:inline-block;
+            float:right; border:1px solid #aaa; padding:5px;">
+  <h3 style="margin-top:0px; color:#2a2;">Project: LibreOffice/cui/sq</h3>
+
+  <iframe src="https://l10n.org.al/btr/project/LibreOffice/cui/sq?display=iframe"
+          width="100%" height="500px"
+          seamless="seamless" frameborder="0">
+  </iframe>
+</div>
+```
