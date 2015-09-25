@@ -31,10 +31,27 @@ function inside_iframe_inside_iframe() {
  * Append to url '?display=iframe' if the page is inside an iframe.
  */
 function inside_iframe_url_outbound_alter(&$path, &$options, $original_path) {
-  if (inside_iframe()) {
-    if (!$options['query'])  $options['query'] = array();
-    $options['query']['display'] = 'iframe';
+  // If we are not inside an iframe, there is nothing to do.
+  if (!inside_iframe())  return;
+
+  // Don't modify the query of an absolute url.
+  if (isset($options['absolute']) and $options['absolute']==TRUE)  return;
+
+  // If a link is external, it should be opened in a new tab/window.
+  if (isset($options['external']) and $options['external']==TRUE) {
+    if (!isset($options['attributes']['target'])) {
+      $options['attributes']['target'] = '_blank';
+    }
   }
+
+  // If the link will open in a new tab/window, then don't modify its query.
+  if (isset($options['attributes']['target'])
+    and $options['attributes']['target'] != '_self') {
+    return;
+  }
+
+  // Modify the query by adding display=iframe
+  $options['query']['display'] = 'iframe';
 }
 
 /**
@@ -42,8 +59,25 @@ function inside_iframe_url_outbound_alter(&$path, &$options, $original_path) {
  * Append to url '?display=iframe' if the page is inside an iframe.
  */
 function inside_iframe_drupal_goto_alter(&$path, &$options, &$http_response_code) {
-  if (inside_iframe()) {
-    if (!$options['query'])  $options['query'] = array();
-    $options['query']['display'] = 'iframe';
+  // If we are not inside an iframe, there is nothing to do.
+  if (!inside_iframe())  return;
+
+  // Don't modify the query of an absolute url.
+  if (isset($options['absolute']) and $options['absolute']==TRUE)  return;
+
+  // If a link is external, it should be opened in a new tab/window.
+  if (isset($options['external']) and $options['external']==TRUE) {
+    if (!isset($options['attributes']['target'])) {
+      $options['attributes']['target'] = '_blank';
+    }
   }
+
+  // If the link will open in a new tab/window, then don't modify its query.
+  if (isset($options['attributes']['target'])
+    and $options['attributes']['target'] != '_self') {
+    return;
+  }
+
+  // Modify the query by adding display=iframe
+  $options['query']['display'] = 'iframe';
 }
